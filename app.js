@@ -3,9 +3,10 @@
  */
 
 var express = require('express')
-  , routes = require('./routes')
   , http = require('http')
-  , path = require('path');
+  , path = require('path')
+  , siteController = require('./controllers/site')
+  , handController = require('./controllers/hand');
 
 var app = express();
 
@@ -25,8 +26,8 @@ if ('development' == app.get('env')) {
   app.use(express.errorHandler());
 }
 
-app.get('/', routes.index);
-app.get('/hand', routes.hand);
+app.get('/', siteController.index);
+app.get('/hand', handController.hand);
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));

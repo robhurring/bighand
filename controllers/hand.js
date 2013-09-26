@@ -1,10 +1,8 @@
-/*
- * GET home page.
- */
 var request = require('request'),
     gm = require('gm'),
-    imageMagick = gm.subClass({imageMagick: true}),
-    hands = {
+    imageMagick = gm.subClass({imageMagick: true});
+
+var hands = {
       'hand': {
         src: 'hands/hand.png',
         gravity: 'SouthWest'
@@ -23,23 +21,29 @@ var request = require('request'),
       }
     };
 
-exports.index = function(req, res){
-  res.render('index', { title: 'Express' });
-};
+var defaultHand = 'hand';
 
+/*
+ * GET /hand
+ *  params:
+ *    url:      source image
+ *    [type]:   type of hand (default: 'hand')
+ */
 exports.hand = function(req, res, next){
-  var source_url = req.query.src;
-  var user_hand = req.query.hand;
-  var hand = hands['hand'];
+  var sourceUrl = req.query.url;
+  var handType = req.query.type;
+  var hand = hands[defaultHand];
 
-  if(user_hand && hands.hasOwnProperty(user_hand)){
-    hand = hands[user_hand];
+  if(handType && hands.hasOwnProperty(handType)){
+    hand = hands[handType];
   }
 
-  imageMagick(request(source_url)).size(function(err, size){
+  // TODO: fix the double request nonsense
+  imageMagick(request(sourceUrl)).size(function(err, size){
     var resize = size.height + 'x' + size.width;
+    if (err) return next(err);
 
-    imageMagick(request(source_url))
+    imageMagick(request(sourceUrl))
       .gravity(hand.gravity)
       .out('(', hand.src, ' ', '-resize', resize, ')')
       .out('-composite')
