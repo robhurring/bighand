@@ -1,8 +1,8 @@
 {
-  "name": "edenize",
+  "name": "bighand",
   "private": true,
   "version": "0.0.1",
-  "description": "#formatt",
+  "description": "Adds a big hand to the given images",
   "scripts": {
     "start": "node app.js"
   },
