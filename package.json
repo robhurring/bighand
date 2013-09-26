@@ -1,15 +1,22 @@
 {
-  "name": "application-name",
-  "version": "0.0.1",
+  "name": "edenize",
   "private": true,
+  "version": "0.0.1",
+  "description": "#formatt",
   "scripts": {
     "start": "node app.js"
   },
+  "engines": {
+    "node": "0.8.x",
+    "npm":  "1.1.x"
+  },
   "dependencies": {
     "express": "3.3.4",
-    "jade": "*",
-    "forewoman": "*",
-    "gm": "*",
-    "request": "*"
+    "jade": "0.35.x",
+    "gm": "1.13.x",
+    "request": "2.27.x"
+  },
+  "developmentDependencies": {
+    "forewoman": "*"
   }
 }
