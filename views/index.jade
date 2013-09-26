@@ -1,4 +1,21 @@
 extends layout
 
 block content
-  h1 Ohai
+  #about
+    h1 BigHand'er
+    p Adds a big hand over an image. For "fun."
+
+  #usage
+    h2 Usage
+    p Pass a <strong>url</strong> param to this app to overlay a hand on it.
+    p You can pass an optional <strong>type</strong> param to specify the hand. The following are valid hands:
+
+    dl
+      dt hand
+      dd This is the default hand
+      dt pinch-1
+      dd This is a pinchy hand.
+      dt pinch-2
+      dd This is also a pinchy hand.
+      dt point
+      dd This hand points.

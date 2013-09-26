@@ -5,19 +5,31 @@ var request = require('request'),
 var hands = {
     'hand': {
       path: 'hands/hand.png',
-      gravity: 'SouthWest'
+      gravity: 'SouthWest',
+      size: function(width, height) {
+        return width + 'x' + height + '^';
+      }
     },
     'pinch-1': {
       path: 'hands/pinch-1.png',
-      gravity: 'SouthEast'
+      gravity: 'SouthEast',
+      size: function(width, height) {
+        return width + 'x' + height + '^';
+      }
     },
     'pinch-2': {
       path: 'hands/pinch-2.png',
-      gravity: 'East'
+      gravity: 'East',
+      size: function(width, height) {
+        return width + 'x' + height + '^';
+      }
     },
     'point': {
-      path: 'hands/pinch-2.png',
-      gravity: 'South'
+      path: 'hands/point.png',
+      gravity: 'South',
+      size: function(width, height) {
+        return width + 'x' + height + '>';
+      }
     }
   };
 
@@ -40,17 +52,21 @@ exports.hand = function(req, res, next){
   var handType = req.query.type;
   var hand = hands[defaultHand];
 
+  if(!sourceUrl) {
+    return res.render('index');
+  }
+
   if(handType && hands.hasOwnProperty(handType)){
     hand = hands[handType];
   }
 
   // TODO: fix the double request nonsense
   imageMagick(request(sourceUrl)).size(function(err, size){
-    var resize = size.width + 'x' + size.height + '^';
     if (err) return next(err);
+    var resizeTo = hand.size(size.width, size.height);
 
     imageMagick(request(sourceUrl))
-      .overlayHand(hand, resize)
+      .overlayHand(hand, resizeTo)
       .stream('png', function (err, stdout) {
         if (err) return next(err);
         res.setHeader('Expires', new Date(Date.now() + 604800000));
