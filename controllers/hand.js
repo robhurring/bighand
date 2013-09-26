@@ -3,25 +3,31 @@ var request = require('request'),
     imageMagick = gm.subClass({imageMagick: true});
 
 var hands = {
-      'hand': {
-        src: 'hands/hand.png',
-        gravity: 'SouthWest'
-      },
-      'pinch-1': {
-        src: 'hands/pinch-1.png',
-        gravity: 'SouthEast'
-      },
-      'pinch-2': {
-        src: 'hands/pinch-2.png',
-        gravity: 'East'
-      },
-      'point': {
-        src: 'hands/pinch-2.png',
-        gravity: 'South'
-      }
-    };
+    'hand': {
+      path: 'hands/hand.png',
+      gravity: 'SouthWest'
+    },
+    'pinch-1': {
+      path: 'hands/pinch-1.png',
+      gravity: 'SouthEast'
+    },
+    'pinch-2': {
+      path: 'hands/pinch-2.png',
+      gravity: 'East'
+    },
+    'point': {
+      path: 'hands/pinch-2.png',
+      gravity: 'South'
+    }
+  };
 
 var defaultHand = 'hand';
+
+imageMagick.prototype.overlayHand = function(hand, resize) {
+  return this.gravity(hand.gravity)
+    .out('(', hand.path, ' ', '-resize', resize, ')')
+    .out('-composite');
+}
 
 /*
  * GET /hand
@@ -40,13 +46,11 @@ exports.hand = function(req, res, next){
 
   // TODO: fix the double request nonsense
   imageMagick(request(sourceUrl)).size(function(err, size){
-    var resize = size.height + 'x' + size.width;
+    var resize = size.width + 'x' + size.height + '^';
     if (err) return next(err);
 
     imageMagick(request(sourceUrl))
-      .gravity(hand.gravity)
-      .out('(', hand.src, ' ', '-resize', resize, ')')
-      .out('-composite')
+      .overlayHand(hand, resize)
       .stream('png', function (err, stdout) {
         if (err) return next(err);
         res.setHeader('Expires', new Date(Date.now() + 604800000));
