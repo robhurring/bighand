@@ -1,39 +1,10 @@
 var request = require('request'),
+    config = require('../config'),
     gm = require('gm'),
     imageMagick = gm.subClass({imageMagick: true});
 
-var hands = {
-    'hand': {
-      path: 'hands/hand.png',
-      gravity: 'SouthWest',
-      size: function(width, height) {
-        return width + 'x' + height + '^';
-      }
-    },
-    'pinch-1': {
-      path: 'hands/pinch-1.png',
-      gravity: 'SouthEast',
-      size: function(width, height) {
-        return width + 'x' + height + '>';
-      }
-    },
-    'pinch-2': {
-      path: 'hands/pinch-2.png',
-      gravity: 'East',
-      size: function(width, height) {
-        return width + 'x' + height + '^';
-      }
-    },
-    'point': {
-      path: 'hands/point.png',
-      gravity: 'South',
-      size: function(width, height) {
-        return width + 'x' + height + '>';
-      }
-    }
-  };
-
-var defaultHand = 'hand';
+var hands = config.hands;
+var defaultHand = config.defaultHandType;
 
 imageMagick.prototype.overlayHand = function(hand, resize) {
   return this.gravity(hand.gravity)
@@ -53,7 +24,7 @@ exports.hand = function(req, res, next){
   var hand = hands[defaultHand];
 
   if(!sourceUrl) {
-    return res.render('index');
+    return res.render('index', {hands: hands});
   }
 
   if(handType && hands.hasOwnProperty(handType)){

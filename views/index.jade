@@ -1,6 +1,7 @@
 extends layout
 
 block content
+  =hands
   .row
     .col-md-6
       h2 Usage
@@ -10,38 +11,26 @@ block content
     .col-md-6
       h2 Hand Types
       dl
-        dt
-          i.glyphicon.glyphicon-hand-right
-          | &nbsp;&nbsp;hand
-        dd This is the default hand
-        dt
-          i.glyphicon.glyphicon-hand-right
-          | &nbsp;&nbsp;pinch-1
-        dd This is a pinchy hand.
-        dt
-          i.glyphicon.glyphicon-hand-right
-          | &nbsp;&nbsp;pinch-1
-        dd This is also a pinchy hand.
-        dt
-          i.glyphicon.glyphicon-hand-right
-          | &nbsp;&nbsp;point
-        dd This hand points.
+        each obj, key in hands
+          dt
+            i.glyphicon.glyphicon-hand-right
+            |&nbsp;&nbsp;
+            = key
+          dd
+            = obj.description
   .row
     .col-md-12
       h2 Try It
       form.form-inline(role="form", action="/", method="get")
+        .form-group.col-md-3
+          label.sr-only(for="type") Hand Type
+          select.form-control(name="type")
+            each obj, key in hands
+              option(value=key)= obj.description
         .form-group.col-md-6
           label.sr-only(for="url") Enter image URL
           .input-group
             .input-group-addon URL
             input.form-control(type="text", name="url", placeholder="Enter Image URL")
-
-        .form-group.col-md-3
-          label.sr-only(for="type") Hand Type
-          select.form-control(name="type")
-            option(value="hand") Hand
-            option(value="pinch-1") Pinch #1
-            option(value="pinch-2") Pinch #2
-            option(value="point") Point
         .col-md-3
           input.btn.btn-warning.btn-default(type="submit") Try
