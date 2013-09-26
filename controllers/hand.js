@@ -14,7 +14,7 @@ var hands = {
       path: 'hands/pinch-1.png',
       gravity: 'SouthEast',
       size: function(width, height) {
-        return width + 'x' + height + '^';
+        return width + 'x' + height + '>';
       }
     },
     'pinch-2': {
