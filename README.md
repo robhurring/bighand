@@ -19,6 +19,7 @@ To get this baddie running locally:
 1. fork
 2. npm install
 3. npm start
+4. visit localhost:3000
 
 ### Adding extra overlays
 
